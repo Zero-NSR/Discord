@@ -3,155 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discord Lookup | Redz Hub</title>
+    <title>Discord Lookup | Redz Edition</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --discord-color: #5865F2;
-            --bg-dark: #090909;
-            --card-bg: #121212;
-            --text-gray: #b9bbbe;
+            --discord-blurple: #5865F2;
+            --discord-green: #23a559;
+            --discord-dark: #313338; /* لون خلفية ديسكورد الحقيقي */
+            --discord-black: #1e1f22;
         }
 
         body {
-            background-color: var(--bg-dark);
-            color: white;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--discord-black);
+            color: #dbdee1;
+            font-family: 'gg sans', 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             margin: 0;
+            padding: 15px;
         }
 
         .container {
-            background-color: var(--card-bg);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-            width: 90%;
-            max-width: 450px;
+            background-color: var(--discord-dark);
+            padding: 24px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
             text-align: center;
-            border: 1px solid #1f1f1f;
         }
 
-        h1 { color: var(--discord-color); margin-bottom: 10px; font-size: 24px; }
-        .tagline { color: var(--text-gray); font-size: 14px; margin-bottom: 25px; }
-
+        h2 { color: white; font-size: 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        
+        /* حقل الإدخال */
+        .input-group { text-align: right; margin-bottom: 20px; }
+        label { display: block; font-size: 12px; font-weight: bold; color: #b5bac1; margin-bottom: 8px; text-transform: uppercase; }
         input {
             width: 100%;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 12px;
-            border: 1px solid #2a2a2a;
-            background: #1a1a1a;
+            padding: 10px;
+            border-radius: 4px;
+            border: none;
+            background: #1e1f22;
             color: white;
+            font-size: 16px;
             box-sizing: border-box;
             outline: none;
-            text-align: center;
-            transition: 0.3s;
         }
 
-        input:focus { border-color: var(--discord-color); }
-
+        /* الأزرار */
         .btn {
             width: 100%;
-            padding: 14px;
-            border-radius: 12px;
+            padding: 12px;
+            border-radius: 3px;
             border: none;
-            font-weight: bold;
+            font-weight: 500;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
             margin-bottom: 10px;
         }
+        .btn-lookup { background: var(--discord-blurple); color: white; }
+        .btn-lookup:hover { background: #4752c4; }
+        
+        .btn-join { background: var(--discord-green); color: white; margin-top: 20px; }
+        .btn-join:hover { background: #1a7a42; }
 
-        .btn-primary { background-color: var(--discord-color); color: white; }
-        .btn-primary:hover { background-color: #4752c4; transform: translateY(-2px); }
-
-        .btn-join { background-color: #23a559; color: white; margin-top: 20px; }
-        .btn-join:hover { background-color: #1a7a42; }
-
-        #result {
+        /* مربع الملف الشخصي (Profile Card) */
+        #profileCard {
             display: none;
-            margin-top: 25px;
-            padding: 20px;
-            background: #181818;
-            border-radius: 15px;
+            margin-top: 20px;
+            background: var(--discord-black);
+            border-radius: 8px;
+            overflow: hidden;
             text-align: right;
-            border: 1px solid #222;
+            border: 1px solid #2a2b2e;
         }
-
+        .banner { height: 60px; background: var(--discord-blurple); width: 100%; }
+        .p-content { padding: 16px; position: relative; }
         .avatar {
-            width: 100px;
-            height: 100px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
-            margin: 0 auto 15px;
-            display: block;
-            border: 4px solid var(--discord-color);
+            border: 6px solid var(--discord-black);
+            position: absolute;
+            top: -35px;
+            right: 15px;
+            background: #313338;
         }
+        .user-info { margin-top: 35px; }
+        .u-name { color: white; font-size: 18px; font-weight: bold; display: block; }
+        .u-tag { color: #b5bac1; font-size: 13px; margin-bottom: 15px; display: block; }
+        
+        .data-section { border-top: 1px solid #3f4147; padding-top: 10px; margin-top: 10px; }
+        .data-item { font-size: 12px; margin-bottom: 5px; color: #dbdee1; }
+        .data-item i { color: #b5bac1; width: 20px; text-align: center; margin-left: 5px; }
 
-        .info-row { margin-bottom: 10px; font-size: 14px; border-bottom: 1px solid #252525; padding-bottom: 5px; }
-        .info-row span { color: var(--discord-color); font-weight: bold; }
-
-        .footer { margin-top: 20px; font-size: 12px; color: #444; }
+        .copy-badge { 
+            font-size: 10px; background: #3f4147; padding: 2px 6px; 
+            border-radius: 4px; cursor: pointer; float: left; 
+        }
+        .copy-badge:hover { background: #4e5058; color: white; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>كاشف ديسكورد</h1>
-        <p class="tagline">استخرج معلومات أي حساب عبر الآيدي (ID)</p>
+        <h2><i class="fab fa-discord"></i> Discord Tracker</h2>
+        
+        <div class="input-group">
+            <label>معرف المستخدم (USER ID)</label>
+            <input type="text" id="targetId" placeholder="مثال: 1297078220373364809">
+        </div>
+        
+        <button class="btn btn-lookup" onclick="getDiscordData()">
+            <i class="fas fa-search"></i> كشف البيانات
+        </button>
 
-        <input type="text" id="userId" placeholder="ضع آيدي (ID) الشخص هنا...">
-        <button class="btn btn-primary" onclick="lookup()">بدء الكشف الآن</button>
-
-        <div id="result">
-            <img id="res-avatar" class="avatar" src="" alt="Avatar">
-            <div class="info-row">الاسم: <span id="res-name"></span></div>
-            <div class="info-row">اليوزر: <span id="res-user"></span></div>
-            <div class="info-row">الآيدي: <span id="res-id"></span></div>
-            <div class="info-row">تاريخ الإنشاء: <span id="res-date"></span></div>
-            <div class="info-row">تاريخ التحديث: <span id="res-update">الآن</span></div>
+        <div id="profileCard">
+            <div class="banner"></div>
+            <div class="p-content">
+                <img id="uAvatar" class="avatar" src="">
+                <div class="user-info">
+                    <span id="uName" class="u-name"></span>
+                    <span id="uUser" class="u-tag"></span>
+                    
+                    <div class="data-section">
+                        <div class="data-item">
+                            <i class="fas fa-calendar-plus"></i> تاريخ الإنشاء: <span id="uDate"></span>
+                        </div>
+                        <div class="data-item">
+                            <i class="fas fa-fingerprint"></i> الآيدي: <span id="uId"></span>
+                            <span class="copy-badge" onclick="copyValue('uId')">نسخ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <button class="btn btn-join" onclick="copyAndGo()">نسخ الرابط ودخول سيرفرنا</button>
-        
-        <div class="footer">By: Zero (Redz Hub)</div>
+        <button class="btn btn-join" onclick="joinAndCopy()">
+            <i class="fab fa-discord"></i> دخول سيرفر Redz
+        </button>
     </div>
 
     <script>
-        async function lookup() {
-            const id = document.getElementById('userId').value;
-            if(!id) return alert("الرجاء إدخال الآيدي!");
+        async function getDiscordData() {
+            const id = document.getElementById('targetId').value.trim();
+            if(!id) return;
 
             try {
-                const response = await fetch(`https://discordlookup.mesalytic.moe/v1/user/${id}`);
-                const data = await response.json();
+                const res = await fetch(`https://discordlookup.mesalytic.moe/v1/user/${id}`);
+                const data = await res.json();
 
                 if(data.id) {
-                    document.getElementById('res-avatar').src = data.avatar.link;
-                    document.getElementById('res-name').innerText = data.global_name || "غير محدد";
-                    document.getElementById('res-user').innerText = data.username;
-                    document.getElementById('res-id').innerText = data.id;
+                    document.getElementById('uAvatar').src = data.avatar.link;
+                    document.getElementById('uName').innerText = data.global_name || data.username;
+                    document.getElementById('uUser').innerText = "@" + data.username;
+                    document.getElementById('uId').innerText = data.id;
                     
-                    // تحويل Snowflake ID إلى تاريخ إنشاء
-                    const createdAt = new Date(Number((BigInt(id) >> 22n) + 1420070400000n));
-                    document.getElementById('res-date').innerText = createdAt.toLocaleDateString('ar-SA');
+                    // حساب التاريخ من الآيدي
+                    const created = new Date(Number((BigInt(id) >> 22n) + 1420070400000n));
+                    document.getElementById('uDate').innerText = created.toLocaleDateString('ar-SA', { year: 'numeric', month: 'long', day: 'numeric' });
 
-                    document.getElementById('result').style.display = 'block';
+                    document.getElementById('profileCard').style.display = 'block';
                 } else {
-                    alert("آيدي غير صحيح أو الحساب غير متاح");
+                    alert("آيدي غير موجود");
                 }
-            } catch (err) {
-                alert("فشل جلب البيانات، تأكد من الآيدي");
+            } catch (e) {
+                alert("حدث خطأ أثناء جلب البيانات");
             }
         }
 
-        function copyAndGo() {
+        function copyValue(id) {
+            const val = document.getElementById(id).innerText;
+            navigator.clipboard.writeText(val);
+            alert("تم النسخ!");
+        }
+
+        function joinAndCopy() {
             const link = "https://discord.gg/WmshaF5szk";
-            navigator.clipboard.writeText(link).then(() => {
-                alert("تم نسخ الرابط بنجاح! سيتم توجيهك للسيرفر.");
-                window.location.href = link;
-            });
+            navigator.clipboard.writeText(link);
+            alert("تم نسخ الرابط! جاري تحويلك لسيرفرنا.");
+            window.location.href = link;
         }
     </script>
 </body>
